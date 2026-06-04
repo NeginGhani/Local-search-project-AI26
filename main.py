@@ -13,7 +13,7 @@ from search.hill_climbing import HillClimbing
 from search.simulated_annealing import SimulatedAnnealing
 from search.beam_search import BeamSearch
 from search.genetics import Genetics
-from search.tabu_search import TabuSearch
+from search.taboo_search import TabooSearch
 
 from utils import represent
 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
         SimulatedAnnealing,
         BeamSearch,
         Genetics,
-        TabuSearch
+        TabooSearch
     ]
 
     initializer = HillClimbing(world)

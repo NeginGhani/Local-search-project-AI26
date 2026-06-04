@@ -3,7 +3,7 @@ from collections import deque
 from search.hill_climbing import HillClimbing
 
 
-class TabuSearch(LocalSearchBase):
+class TabooSearch(LocalSearchBase):
 
     def run(self, initial_state = None, tabu_size = 20, branch_factor = 10):
 
