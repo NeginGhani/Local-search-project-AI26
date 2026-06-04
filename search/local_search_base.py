@@ -1,5 +1,6 @@
 import random
 import copy
+import math
 
 class LocalSearchBase:
     def __init__(self, world):
@@ -36,7 +37,7 @@ class LocalSearchBase:
 
     def initialize_state(self):
         # Generate a random start
-        sensor_num = random.randint(0, self.N)
+        sensor_num = min(self.N, 10)
         state = []
         for _ in range(sensor_num):
             pos = self.get_weighted_random_position(state)
@@ -44,10 +45,10 @@ class LocalSearchBase:
                 state.append(pos)
         return sorted(state)
 
-    def get_neighbor(self, state):
+    def get_neighbor(self, state, op = None):
 
         # one neighbor with move/add/remove operations
-        # 50% chance to add, 30% chance to move and 20% chance to remove
+        # 40% chance to add, 35% chance to move and 25% chance to remove
         
         new_state = copy.deepcopy(state)
 
@@ -57,15 +58,16 @@ class LocalSearchBase:
                 new_state.append(new_pos)
             return sorted(new_state)
 
-        op = random.random()
+        if not op:
+            op = random.random()
 
         # Add
-        if op < 0.5 and len(new_state) < self.N:
+        if op < 0.45 and len(new_state) < self.N:
             new_pos = self.get_weighted_random_position(new_state)
             if new_pos:
                 new_state.append(new_pos)
         # Move              
-        elif op < 0.8 and new_state:                    
+        elif op < 0.90 and new_state:                    
             idx = random.randrange(len(new_state))
             new_pos = self.get_weighted_random_position(new_state)
             if new_pos:
