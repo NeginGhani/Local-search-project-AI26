@@ -1,7 +1,7 @@
 from search.local_search_base import LocalSearchBase
 
 class HillClimbing(LocalSearchBase):
-    def run(self, initial_state=None, max_iter=1000, branch_factor = 10):
+    def run(self, initial_state=None, branch_factor = 15):
 
         if initial_state is None:
             initial_state = self.initialize_state()
@@ -13,13 +13,14 @@ class HillClimbing(LocalSearchBase):
         evaluations = [current_cost]
 
 
-        for _ in range(max_iter):
+        for _ in range(self.max_iter):
+
             neighbors = [self.get_neighbor(current_state) for _ in range(branch_factor)]
             neighbor_cost = [self.evaluate(child) for child in neighbors]
             best_neighbor, best_neighbor_cost = min(zip(neighbors, neighbor_cost), key=lambda x: x[1])
 
             if best_neighbor_cost < current_cost:
-                current_state = best_neighbor
+                current_state = best_neighbor.copy()
                 current_cost = best_neighbor_cost
                 evaluations.append(best_neighbor_cost)
                 states_history.append(current_state)

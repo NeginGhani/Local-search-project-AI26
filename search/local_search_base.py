@@ -1,13 +1,13 @@
 import random
 import copy
-import math
 
 class LocalSearchBase:
-    def __init__(self, world):
+    def __init__(self, world, max_iter = 200):
         self.world = world
         self.targets = world.get_targets()
         self.r = world.sensor_range
         self.N = world.max_sensors
+        self.max_iter = max_iter
 
         # Pre compute which targets are in range for each tile
         self.coverage = {}
@@ -19,11 +19,14 @@ class LocalSearchBase:
                     self.coverage[(i, j)] = covered
 
         self.valid_pos = []
-        self.pos_chance = []
+        pos_chance = [] # Chance is based on coverage number
+
         for pos, cover_num in self.coverage.items():
             if cover_num:
                 self.valid_pos.append(pos)
-                self.pos_chance.append(len(cover_num))
+                pos_chance.append(len(cover_num))
+
+        self.tile_and_chance = zip(self.valid_pos, self.pos_chance) # Each tile and its chance
         
 
     def evaluate(self, state):
@@ -48,9 +51,9 @@ class LocalSearchBase:
     def get_neighbor(self, state, op = None):
 
         # one neighbor with move/add/remove operations
-        # 40% chance to add, 35% chance to move and 25% chance to remove
+        # 45% chance to add, 45% chance to move and 10% chance to remove
         
-        new_state = copy.deepcopy(state)
+        new_state = state.copy()
 
         if not new_state:  # must add
             new_pos = self.get_weighted_random_position(new_state)
@@ -58,7 +61,7 @@ class LocalSearchBase:
                 new_state.append(new_pos)
             return sorted(new_state)
 
-        if not op:
+        if op is None:
             op = random.random()
 
         # Add
@@ -82,11 +85,13 @@ class LocalSearchBase:
     
 
     def get_weighted_random_position(self, current_state):
+
+        # weight is based on coverage number
         occupied = set(current_state)        
         candidates = []
         weights = []
         
-        for pos, weight in zip(self.valid_pos, self.pos_chance):
+        for pos, weight in self.tile_and_chance:
             if pos not in occupied:
                 candidates.append(pos)
                 weights.append(weight)                
