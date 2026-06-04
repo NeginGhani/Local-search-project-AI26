@@ -7,11 +7,9 @@ class HillClimbing(LocalSearchBase):
             initial_state = self.initialize_state()
 
         current_state = initial_state.copy()
-        current_cost = self.evaluate(initial_state)
-
-        states_history = [initial_state]
+        current_cost = self.evaluate(current_state)
+        states_history = [current_state]
         evaluations = [current_cost]
-
 
         for _ in range(self.max_iter):
 
@@ -27,7 +25,7 @@ class HillClimbing(LocalSearchBase):
 
             else:
 
-                break  # No improvement → stop climbing
+                break  # No improvement => stop climbing
 
         best_state = states_history[-1]
         best_cost = evaluations[-1]

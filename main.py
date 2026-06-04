@@ -7,10 +7,14 @@ Professor: Dr. Faria Nasiri Mofakham
 TAs: MehrAzin Marzough, Mohammad Karimi, Anahita Honarmandian
 Project: Implementing Local Search Algorithms for a Sensor Placement Optimization Problem
 """
+
 from env.grid_world import GridWorld
 from search.hill_climbing import HillClimbing
 from search.simulated_annealing import SimulatedAnnealing
 from search.beam_search import BeamSearch
+from search.genetics import Genetics
+from search.tabu_search import TabuSearch
+
 from utils import represent
 
 import re
@@ -34,8 +38,7 @@ def run_algorithms(world, initial_state, algorithm_classes):
         algorithm_instance = algorithm_class(world)
         
         print(f"\nRunning {name}...")
-        state, cost, evals, hist = algorithm_instance.run(initial_state)
-        print(len(state))
+        state, cost, evals, hist = algorithm_instance.run(initial_state.copy())
         best_states.append(state)
         best_costs.append(cost)
         evaluations.append(evals)
@@ -52,20 +55,22 @@ def run_algorithms(world, initial_state, algorithm_classes):
     )
 
 
+
 if __name__ == "__main__":
     
     # Load the grid world map configuration (e.g., "map1")
-    world = GridWorld("map4")
+    world = GridWorld("map1")
 
     algorithm_classes = [
         HillClimbing,
         SimulatedAnnealing,
-        BeamSearch
+        BeamSearch,
+        Genetics,
+        TabuSearch
     ]
 
     initializer = HillClimbing(world)
-    initial_state = initializer.initialize_state()
-    print(f'sensor limit: {initializer.N}')
+    initial = initializer.initialize_state()
 
     # Run the evaluation pipeline
-    run_algorithms(world, initial_state, algorithm_classes)
+    run_algorithms(world, initial, algorithm_classes)

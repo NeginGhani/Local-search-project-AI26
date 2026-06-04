@@ -8,26 +8,18 @@ class BeamSearch(LocalSearchBase):
         if initial_state is None:
             initial_state = self.initialize_state()
 
-        current_cost = self.evaluate(initial_state)
-        states_history = [initial_state]
+        current_state = initial_state.copy()
+        current_cost = self.evaluate(current_state)
+        states_history = [current_state]
         evaluations = [current_cost]
-
-        best_state = initial_state
-        best_cost = current_cost
-
-        beams = [initial_state]
+        beams = [current_state]
+        
         for _ in range(beam_number - 1):
             beam_root = self.get_neighbor(initial_state)
             beams.append(beam_root)
         
-        plateau = 0
-
         for _ in range(self.max_iter):
             
-            # Check if cost is plateaued
-            if plateau > 14:
-                break
-
             candidates = [] # Keeps all beams' children
             # Expand each beam branch_factor times
             for state in beams:
@@ -39,13 +31,6 @@ class BeamSearch(LocalSearchBase):
             candidates.sort(key= lambda x: x[1])
 
             top_candidate = candidates[0][1]
-            last_cost = evaluations[-1]
-
-            # Keep track of plateaus
-            if top_candidate == last_cost:
-                plateau += 1
-            else:
-                plateau = 0
 
             # Check progress
             if top_candidate <= current_cost:

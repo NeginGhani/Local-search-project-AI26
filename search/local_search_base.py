@@ -19,14 +19,12 @@ class LocalSearchBase:
                     self.coverage[(i, j)] = covered
 
         self.valid_pos = []
-        pos_chance = [] # Chance is based on coverage number
+        self.pos_chance = [] # Chance is based on coverage number
 
         for pos, cover_num in self.coverage.items():
             if cover_num:
                 self.valid_pos.append(pos)
-                pos_chance.append(len(cover_num))
-
-        self.tile_and_chance = zip(self.valid_pos, self.pos_chance) # Each tile and its chance
+                self.pos_chance.append(len(cover_num))
         
 
     def evaluate(self, state):
@@ -91,7 +89,7 @@ class LocalSearchBase:
         candidates = []
         weights = []
         
-        for pos, weight in self.tile_and_chance:
+        for pos, weight in zip(self.valid_pos, self.pos_chance):
             if pos not in occupied:
                 candidates.append(pos)
                 weights.append(weight)                

@@ -12,17 +12,16 @@ class SimulatedAnnealing(LocalSearchBase):
         temp = temperature  # Current temperature
         current_state = initial_state.copy()
         current_cost = self.evaluate(current_state)
-
-        states_history = [initial_state]
+        states_history = [current_state]
         evaluations = [current_cost]
-
+        
         plateau = 0
 
         # Simulated Annealing
         while temp > min_temp:
 
             # Check if cost is plateaued
-            if plateau > 14:
+            if plateau == 30:
                 break
 
             neighbor = self.get_neighbor(current_state)
@@ -32,7 +31,7 @@ class SimulatedAnnealing(LocalSearchBase):
 
             # If better, always accept
             if delta < 0:
-                current_state = neighbor.copy()
+                current_state = neighbor
                 current_cost = neighbor_cost
 
             # If worse/equal, accept with probability exp(-delta / temp)
