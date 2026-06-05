@@ -5,7 +5,7 @@ from search.hill_climbing import HillClimbing
 
 class TabooSearch(LocalSearchBase):
 
-    def run(self, initial_state = None, tabu_size = 20, branch_factor = 10):
+    def run(self, initial_state = None, taboo_size = 20, branch_factor = 10):
 
         if not initial_state:
             initial_state = self.initialize_state()
@@ -13,7 +13,7 @@ class TabooSearch(LocalSearchBase):
         current_state = initial_state.copy()
         current_cost = self.evaluate(initial_state)
 
-        tabu = deque(maxlen = tabu_size)
+        taboo = deque(maxlen = taboo_size)
         states_history =  [current_state]
         evaluations = [current_cost]
         
@@ -38,7 +38,7 @@ class TabooSearch(LocalSearchBase):
             for neighbor, neighbor_cost in candidates:
 
                 # find the best allowed neighbor
-                if not (neighbor in tabu):
+                if not (neighbor in taboo):
                     current_state = neighbor.copy()
                     current_cost = neighbor_cost
                     states_history.append(current_state)
@@ -51,7 +51,7 @@ class TabooSearch(LocalSearchBase):
                         plateau = 0
 
                     evaluations.append(current_cost)
-                    tabu.append(neighbor)
+                    taboo.append(neighbor)
                     break
 
         last_state = states_history[-1]
