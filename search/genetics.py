@@ -11,6 +11,8 @@ class Genetics(LocalSearchBase):
 
         current_state = initial_state.copy()
         current_cost = self.evaluate(current_state)
+        best_state = current_state
+        best_cost = current_cost
 
         population = [self.mutation(current_state) for _ in range(population_size)]
         states_history = [current_state]
@@ -37,6 +39,10 @@ class Genetics(LocalSearchBase):
             current_state = min(population, key= self.evaluate)
             current_cost = self.evaluate(current_state)
 
+            if current_cost < best_cost:
+                best_cost = current_cost
+                best_state = current_state
+
             # Keep track of plateaus
             last_cost = evaluations[-1]
             if last_cost == current_cost:
@@ -49,11 +55,16 @@ class Genetics(LocalSearchBase):
 
         last_state = states_history[-1]
         HC = HillClimbing(self.world)
-        best_state, best_cost, HC_evaluations, HC_states_history = HC.run(
+        _, _, HC_evaluations, HC_states_history = HC.run(
         initial_state=last_state)
 
         evaluations.extend(HC_evaluations[1:])
         states_history.extend(HC_states_history[1:])
+
+        if evaluations[-1] < best_cost:
+            best_cost = evaluations[-1]
+            best_state = states_history[-1]
+    
 
         return best_state, best_cost, evaluations, states_history
 

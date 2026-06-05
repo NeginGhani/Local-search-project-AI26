@@ -12,6 +12,8 @@ class TabooSearch(LocalSearchBase):
 
         current_state = initial_state.copy()
         current_cost = self.evaluate(initial_state)
+        best_state = current_state
+        best_cost = current_cost
 
         taboo = deque(maxlen = taboo_size)
         states_history =  [current_state]
@@ -42,6 +44,11 @@ class TabooSearch(LocalSearchBase):
                     current_state = neighbor.copy()
                     current_cost = neighbor_cost
                     states_history.append(current_state)
+
+                    if current_cost < best_cost:
+                        best_cost = current_cost
+                        best_state = current_state
+
                     
                     # Keep track of plateaus
                     last_cost = evaluations[-1]
@@ -61,5 +68,10 @@ class TabooSearch(LocalSearchBase):
 
         evaluations.extend(HC_evaluations[1:])
         states_history.extend(HC_states_history[1:])
+        
+        if evaluations[-1] < best_cost:
+            best_cost = evaluations[-1]
+            best_state = states_history[-1]
+ 
 
         return best_state, best_cost, evaluations, states_history

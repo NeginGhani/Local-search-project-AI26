@@ -14,6 +14,8 @@ class SimulatedAnnealing(LocalSearchBase):
         current_cost = self.evaluate(current_state)
         states_history = [current_state]
         evaluations = [current_cost]
+        best_state = current_state
+        best_cost = current_cost
         
         plateau = 0
 
@@ -47,6 +49,10 @@ class SimulatedAnnealing(LocalSearchBase):
                     current_state = neighbor
                     current_cost = neighbor_cost
 
+            if current_cost < best_cost:
+                best_cost = current_cost
+                best_state = current_state            
+
             # Keep track of plateaus
             last_cost = evaluations[-1]
             if last_cost == current_cost:
@@ -61,10 +67,15 @@ class SimulatedAnnealing(LocalSearchBase):
 
         # Find region's optima using Hill Climbing
         HC = HillClimbing(self.world)
-        best_state, best_cost, HC_evaluations, HC_states_history = HC.run(
+        _, _, HC_evaluations, HC_states_history = HC.run(
             initial_state=current_state)
 
         evaluations.extend(HC_evaluations[1:])
         states_history.extend(HC_states_history[1:])
+        
+        if evaluations[-1] < best_cost:
+            best_cost = evaluations[-1]
+            best_state = states_history[-1]
+    
 
         return best_state, best_cost, evaluations, states_history
