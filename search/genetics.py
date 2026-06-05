@@ -67,10 +67,14 @@ class Genetics(LocalSearchBase):
         return sorted(child)
 
     def mutation(self, state):
-        # 30% no mutation, 70% mutation 
+        # 30% no mutation, 60% chromosome change, 10% chromosome deletion
         action = random.random()
-        if action >= 0.3:
-            state = self.get_neighbor(state)
+        if action >= 0.9:
+            state = self.get_neighbor(state, op = 0.95) # Force deletion
+
+        elif action >= 0.3:
+            state = self.get_neighbor(state, op = 0.5 ) # Force change
+
         return state
     
     def fitness(self, generation):
