@@ -1,5 +1,4 @@
 from search.local_search_base import LocalSearchBase
-from search.hill_climbing import HillClimbing
 import random
 import math
 
@@ -64,18 +63,6 @@ class SimulatedAnnealing(LocalSearchBase):
             evaluations.append(current_cost)
 
             temp *= cd_rate
-
-        # Find region's optima using Hill Climbing
-        HC = HillClimbing(self.world)
-        _, _, HC_evaluations, HC_states_history = HC.run(
-            initial_state=current_state)
-
-        evaluations.extend(HC_evaluations[1:])
-        states_history.extend(HC_states_history[1:])
-        
-        if evaluations[-1] < best_cost:
-            best_cost = evaluations[-1]
-            best_state = states_history[-1]
-    
+ 
 
         return best_state, best_cost, evaluations, states_history

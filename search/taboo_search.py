@@ -1,6 +1,5 @@
 from search.local_search_base import LocalSearchBase
 from collections import deque
-from search.hill_climbing import HillClimbing
 
 
 class TabooSearch(LocalSearchBase):
@@ -61,17 +60,5 @@ class TabooSearch(LocalSearchBase):
                     taboo.append(neighbor)
                     break
 
-        last_state = states_history[-1]
-        HC = HillClimbing(self.world)
-        best_state, best_cost, HC_evaluations, HC_states_history = HC.run(
-        initial_state=last_state)
-
-        evaluations.extend(HC_evaluations[1:])
-        states_history.extend(HC_states_history[1:])
-        
-        if evaluations[-1] < best_cost:
-            best_cost = evaluations[-1]
-            best_state = states_history[-1]
- 
 
         return best_state, best_cost, evaluations, states_history

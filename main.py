@@ -59,7 +59,7 @@ def run_algorithms(world, initial_state, algorithm_classes):
 if __name__ == "__main__":
     
     # Load the grid world map configuration (e.g., "map1")
-    world = GridWorld("map1")
+    world = GridWorld("map2")
 
     algorithm_classes = [
         HillClimbing,

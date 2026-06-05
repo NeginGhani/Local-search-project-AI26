@@ -1,7 +1,6 @@
 from search.local_search_base import LocalSearchBase
 import random
 import statistics
-from search.hill_climbing import HillClimbing
 
 class Genetics(LocalSearchBase):
     def run(self, initial_state = None, population_size = 20):
@@ -53,18 +52,6 @@ class Genetics(LocalSearchBase):
             evaluations.append(current_cost)
             states_history.append(current_state)
 
-        last_state = states_history[-1]
-        HC = HillClimbing(self.world)
-        _, _, HC_evaluations, HC_states_history = HC.run(
-        initial_state=last_state)
-
-        evaluations.extend(HC_evaluations[1:])
-        states_history.extend(HC_states_history[1:])
-
-        if evaluations[-1] < best_cost:
-            best_cost = evaluations[-1]
-            best_state = states_history[-1]
-    
 
         return best_state, best_cost, evaluations, states_history
 
