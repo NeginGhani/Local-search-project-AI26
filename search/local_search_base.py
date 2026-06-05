@@ -46,7 +46,7 @@ class LocalSearchBase:
                 state.append(pos)
         return sorted(state)
 
-    def get_neighbor(self, state, op = None):
+    def get_neighbor(self, state):
 
         # one neighbor with move/add/remove operations
         # 45% chance to add, 45% chance to move and 10% chance to remove
@@ -59,8 +59,8 @@ class LocalSearchBase:
                 new_state.append(new_pos)
             return sorted(new_state)
 
-        if op is None:
-            op = random.random()
+
+        op = random.random()
 
         # Add
         if op < 0.45 and len(new_state) < self.N:

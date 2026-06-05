@@ -17,14 +17,9 @@ class Genetics(LocalSearchBase):
         states_history = [current_state]
         evaluations = [current_cost]
         
-        plateau = 0
-        
+       
         for _ in range(self.max_iter):
             
-            # Check if cost is plateaued
-            if plateau == 30:
-                break
-
             next_generation = []    # Keep all childern
 
             for _ in range(population_size * 2):
@@ -42,12 +37,6 @@ class Genetics(LocalSearchBase):
                 best_cost = current_cost
                 best_state = current_state
 
-            # Keep track of plateaus
-            last_cost = evaluations[-1]
-            if last_cost == current_cost:
-                plateau += 1
-            else:
-                plateau = 0
 
             evaluations.append(current_cost)
             states_history.append(current_state)
@@ -78,10 +67,10 @@ class Genetics(LocalSearchBase):
         return sorted(child)
 
     def mutation(self, state):
-        # 45% no mutation, 45% move a sensor, 10% delete a sensor 
+        # 30% no mutation, 70% mutation 
         action = random.random()
-        if action >= 0.45:
-            state = self.get_neighbor(state, action)
+        if action >= 0.3:
+            state = self.get_neighbor(state)
         return state
     
     def fitness(self, generation):

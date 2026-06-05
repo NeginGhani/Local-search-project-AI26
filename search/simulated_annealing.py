@@ -16,14 +16,8 @@ class SimulatedAnnealing(LocalSearchBase):
         best_state = current_state
         best_cost = current_cost
         
-        plateau = 0
-
         # Simulated Annealing
         while temp > min_temp:
-
-            # Check if cost is plateaued
-            if plateau == 30:
-                break
 
             neighbor = self.get_neighbor(current_state)
             neighbor_cost = self.evaluate(neighbor)
@@ -51,13 +45,6 @@ class SimulatedAnnealing(LocalSearchBase):
             if current_cost < best_cost:
                 best_cost = current_cost
                 best_state = current_state            
-
-            # Keep track of plateaus
-            last_cost = evaluations[-1]
-            if last_cost == current_cost:
-                plateau += 1
-            else:
-                plateau = 0
 
             states_history.append(current_state)
             evaluations.append(current_cost)

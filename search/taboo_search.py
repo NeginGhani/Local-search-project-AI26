@@ -18,13 +18,8 @@ class TabooSearch(LocalSearchBase):
         states_history =  [current_state]
         evaluations = [current_cost]
         
-        plateau = 0
 
         for _ in range(self.max_iter):
-
-            # Check if cost is plateaued
-            if plateau == 30:
-                break
 
             candidates = []     # Keep all children
 
@@ -48,13 +43,6 @@ class TabooSearch(LocalSearchBase):
                         best_cost = current_cost
                         best_state = current_state
 
-                    
-                    # Keep track of plateaus
-                    last_cost = evaluations[-1]
-                    if last_cost == current_cost:
-                        plateau += 1
-                    else:
-                        plateau = 0
 
                     evaluations.append(current_cost)
                     taboo.append(neighbor)
